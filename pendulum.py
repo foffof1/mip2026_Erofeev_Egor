@@ -32,7 +32,7 @@ K = -K
 physicsClient = p.connect(p.GUI if guiFlag else p.DIRECT) # or p.DIRECT for non-graphical version
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0,0,-g)
-##planeId = p.loadURDF("plane.urdf")
+planeId = p.loadURDF("plane.urdf")
 boxId = p.loadURDF("./simple.urdf.xml", useFixedBase=True)
 
 # get rid of all the default damping forces
