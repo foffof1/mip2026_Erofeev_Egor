@@ -9,8 +9,8 @@ from control.matlab import place, lqr
 guiFlag = False
 
 dt = 1/240 # pybullet simulation step
-th0 = 0.1  # starting position (radian)
-thd = 1.0  # desired position (radian)
+th0 = np.pi - 0.1  # starting position (radian)
+thd = np.pi  # desired position (radian)
 kp = 40.0  # proportional coefficient
 ki = 40.0
 kd = 20.0
@@ -19,7 +19,7 @@ L = 0.8    # m
 m = 1      # kg
 f0 = 10    # applied const force
 
-A = np.array([[0, 1], [-g/L, 0]])
+A = np.array([[0, 1], [g/L, 0]])
 B = np.array([[0], [1/(m*L*L)]])
 poles = np.array([-10,-20])
 K = -place(A, B, poles) # A-BK
@@ -32,7 +32,7 @@ K = -K
 physicsClient = p.connect(p.GUI if guiFlag else p.DIRECT) # or p.DIRECT for non-graphical version
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0,0,-g)
-planeId = p.loadURDF("plane.urdf")
+##planeId = p.loadURDF("plane.urdf")
 boxId = p.loadURDF("./simple.urdf.xml", useFixedBase=True)
 
 # get rid of all the default damping forces
@@ -71,7 +71,7 @@ for t in logTime:
     # Feedback linearization
     # tau = (m*L*L)*(g/L*np.sin(th) - kp*e - kd * vel)
 
-    tau = K[0,0] * th + K[0,1] * vel
+    tau = K[0,0] * e + K[0,1] * vel
     logTauSim[idx] = tau
 
     # p.setJointMotorControl2(bodyIndex=boxId, jointIndex=1, targetVelocity=dth, controlMode=p.VELOCITY_CONTROL)
